@@ -1,0 +1,33 @@
+import { User } from '../entities/User'
+import { UserRepository } from '../boundries/UserRepository'
+
+export interface CreateUserRequest {
+  name: string
+  email: string
+  password: string
+}
+
+export interface CreateUserResult {}
+
+export interface Props {
+  userRepository: UserRepository
+}
+
+export class CreateUserUsecase {
+  public async execute(request: CreateUserRequest): Promise<CreateUserResult> {
+    if (await this._userRepository.findByEmail(request.email)) {
+      throw new Error(`User with email '${request.email}' exists.`)
+    }
+
+    const user = new User({ ...request })
+    await this._userRepository.save(user)
+
+    return {}
+  }
+
+  public constructor(props: Props) {
+    this._userRepository = props.userRepository
+  }
+
+  private _userRepository: UserRepository
+}
