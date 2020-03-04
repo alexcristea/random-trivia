@@ -1,3 +1,6 @@
+import { DynamoUserRepository } from '../../repository/DynamoUserRepository'
+import { CreateUserUsecase } from '../../domain/usecases/CreateUserUsecase'
+
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -30,8 +33,21 @@ userRouter
   .put((req: any, res: any, next: any) => {
     next(new HTTPErrror(405, 'Method not supported.'))
   })
-  .post((req: any, res: any, next: any) => {
-    next(new HTTPErrror(405, 'Method not supported.'))
+  .post(async (req: any, res: any, next: any) => {
+    const userRepository = new DynamoUserRepository()
+    const usecase = new CreateUserUsecase({ userRepository })
+
+    try {
+      await usecase.execute(req.body)
+      res.status(204).send()
+    } catch (error) {
+      console.log(`> ${error.message}`)
+      res.status(400).json({
+        status: 'error',
+        statusCode: 400,
+        message: error.message
+      })
+    }
   })
 
 app.use('/user', userRouter)
