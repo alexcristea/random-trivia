@@ -7,7 +7,7 @@ export interface Props {
 }
 
 export interface Snapshot {
-  userID: string
+  ID: string
   name: string
   email: string
   password: string
@@ -25,7 +25,7 @@ export class User {
 
   public get snapshot(): Snapshot {
     return Object.freeze({
-      userID: this.ID,
+      ID: this.ID,
       name: this.name,
       email: this.email,
       password: this.password,

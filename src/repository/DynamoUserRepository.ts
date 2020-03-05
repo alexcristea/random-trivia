@@ -9,7 +9,7 @@ AWS.config.update({
 
 export class DynamoUserRepository implements UserRepository {
   private dynamodb = new AWS.DynamoDB.DocumentClient()
-  private tableName = 'users'
+  private tableName = 'Users'
   private indexName = 'email-index'
 
   async findByEmail(email: string) {
