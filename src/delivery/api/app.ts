@@ -34,7 +34,14 @@ userRouter
     next(new HTTPErrror(405, 'Method not supported.'))
   })
   .post(async (req: any, res: any, next: any) => {
-    const userRepository = new DynamoUserRepository()
+    const AWS = require('aws-sdk')
+    AWS.config.update({
+      region: process.env.AWS_REGION,
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_KEY_ID
+    })
+    const dynamoDB = new AWS.DynamoDB.DocumentClient()
+    const userRepository = new DynamoUserRepository(dynamoDB)
     const usecase = new CreateUserUsecase({ userRepository })
 
     try {

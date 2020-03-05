@@ -1,16 +1,14 @@
 import { UserRepository } from '../domain/boundries/UserRepository'
 import { User } from '../domain/entities/User'
-const AWS = require('aws-sdk')
-AWS.config.update({
-  region: 'eu-west-1',
-  accessKeyId: 'ACCESS_KEY_ID',
-  secretAccessKey: 'SECRET_KEY_ID'
-})
 
 export class DynamoUserRepository implements UserRepository {
-  private dynamodb = new AWS.DynamoDB.DocumentClient()
+  private dynamodb: any
   private tableName = 'Users'
   private indexName = 'email-index'
+
+  constructor(dynomoDB: any) {
+    this.dynamodb = dynomoDB
+  }
 
   async findByEmail(email: string) {
     const query = {
