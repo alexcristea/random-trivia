@@ -10,7 +10,7 @@ describe('CreateUserUsecase execute', () => {
     password: 'secret'
   }
 
-  test('should return a CreateUserResult when called with a valid CreateUserRequest', async () => {
+  test('should return a User when called with a valid CreateUserRequest', async () => {
     // Arrange
     const userRepository = new StubUserRepository()
     const sut = new CreateUserUsecase({ userRepository })
@@ -19,10 +19,10 @@ describe('CreateUserUsecase execute', () => {
     const response = await sut.execute(request)
 
     // Assert
-    expect(response).toEqual({})
+    expect(response).toBeInstanceOf(User)
   })
 
-  test('should return a CreateUserResult when the email is uniq', async () => {
+  test('should return a User when the email is uniq', async () => {
     // Arrange
     const userRepository = new StubUserRepository()
     const sut = new CreateUserUsecase({ userRepository })
@@ -31,7 +31,7 @@ describe('CreateUserUsecase execute', () => {
     const response = await sut.execute(request)
 
     // Assert
-    expect(response).toEqual({})
+    expect(response).toBeInstanceOf(User)
   })
 
   test('should return an Error when the email exists', async () => {
@@ -48,15 +48,15 @@ describe('CreateUserUsecase execute', () => {
     }
   })
 
-  // test('should create and save a User into the UserRepository', async () => {
-  //   // Arrange
-  //   const userRepository = new StubUserRepository()
-  //   const sut = new CreateUserUsecase({ userRepository })
+  test('should create and save a User into the UserRepository', async () => {
+    // Arrange
+    const userRepository = new StubUserRepository()
+    const sut = new CreateUserUsecase({ userRepository })
 
-  //   // Act
-  //   await sut.execute(request)
+    // Act
+    let actual = await sut.execute(request)
 
-  //   // Assert
-  //   expect(userRepository.savedUser).toEqual(new User({ ...request }))
-  // })
+    // Assert
+    expect(userRepository.savedUser).toBe(actual)
+  })
 })

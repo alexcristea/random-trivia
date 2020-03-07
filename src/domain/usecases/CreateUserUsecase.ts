@@ -7,14 +7,12 @@ export interface CreateUserRequest {
   password: string
 }
 
-export interface CreateUserResult {}
-
 export interface Props {
   userRepository: UserRepository
 }
 
 export class CreateUserUsecase {
-  public async execute(request: CreateUserRequest): Promise<CreateUserResult> {
+  public async execute(request: CreateUserRequest): Promise<User> {
     if (await this._userRepository.findByEmail(request.email)) {
       throw new Error(`User with email '${request.email}' exists.`)
     }
@@ -22,7 +20,7 @@ export class CreateUserUsecase {
     const user = new User({ ...request })
     await this._userRepository.save(user)
 
-    return {}
+    return user
   }
 
   public constructor(props: Props) {
