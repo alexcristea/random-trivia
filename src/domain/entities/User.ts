@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid'
+const bcrypt = require('bcrypt')
 
 export interface Props {
   name: string
@@ -16,32 +17,61 @@ export interface Snapshot {
 }
 
 export class User {
-  private ID: string
-  private name: string
-  private email: string
-  private password: string
-  private createdAt: Date
-  private modifiedAt: Date
+  private _ID: string
+  private _name: string
+  private _email: string
+  private _password: string
+  private _createdAt: Date
+  private _modifiedAt: Date
+
+  public static async create(props: Props) {
+    const password = await bcrypt.hash(props.password, 10)
+    return new User({ ...props, password })
+  }
+
+  public get ID(): string {
+    return this._ID
+  }
+
+  public get name(): string {
+    return this._name
+  }
+
+  public get email(): string {
+    return this._email
+  }
+
+  public get password(): string {
+    return this._password
+  }
+
+  public get createdAt(): Date {
+    return this._createdAt
+  }
+
+  public get modifiedAt(): Date {
+    return this._modifiedAt
+  }
 
   public get snapshot(): Snapshot {
     return Object.freeze({
-      ID: this.ID,
-      name: this.name,
-      email: this.email,
-      password: this.password,
-      createdAt: this.createdAt,
-      modifiedAt: this.modifiedAt
+      ID: this._ID,
+      name: this._name,
+      email: this._email,
+      password: this._password,
+      createdAt: this._createdAt,
+      modifiedAt: this._modifiedAt
     })
   }
 
   public constructor(props: Props) {
-    this.ID = uuid()
-    this.name = props.name
-    this.email = props.email
-    this.password = props.password
+    this._ID = uuid()
+    this._name = props.name
+    this._email = props.email
+    this._password = props.password
 
     const now = new Date()
-    this.createdAt = now
-    this.modifiedAt = now
+    this._createdAt = now
+    this._modifiedAt = now
   }
 }
