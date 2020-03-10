@@ -2,7 +2,7 @@ import { AWS } from '../factory/AWSFactory'
 import { DynamoUserRepository } from '../../../repository/DynamoUserRepository'
 import { CreateUserUsecase } from '../../../domain/usecases/CreateUserUsecase'
 
-const CreateUserController = async (req: any, res: any, next: any) => {
+export const CreateUserController = async (req: any, res: any, next: any) => {
   try {
     const dynamoDB = new AWS.DynamoDB.DocumentClient()
     const userRepository = new DynamoUserRepository(dynamoDB)
@@ -19,5 +19,3 @@ const CreateUserController = async (req: any, res: any, next: any) => {
     })
   }
 }
-
-export { CreateUserController }

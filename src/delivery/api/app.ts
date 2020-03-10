@@ -1,4 +1,6 @@
 import { CreateUserController } from './controller/CreateUserController'
+import { RouteUnavailableMiddleware } from './controller/MethodUnavailableController'
+import { ErrorHandlerMiddleware } from './controller/ErrorController'
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -12,29 +14,9 @@ app.use(express.json())
 
 app.post('/user', CreateUserController)
 
-app.use(function(req: any, res: any) {
-  const statusCode = 404
-  const message = `Cannot ${req.method} ${req.originalUrl}`
+app.use(RouteUnavailableMiddleware)
+app.use(ErrorHandlerMiddleware)
 
-  console.log(`> ${message}`)
-  res.status(statusCode).json({
-    status: 'error',
-    statusCode,
-    message
-  })
-})
-
-app.use((err: any, req: any, res: any, next: any) => {
-  const { message, statusCode } = err
-
-  console.log(`> ${message}`)
-  res.status(statusCode).json({
-    status: 'error',
-    statusCode,
-    message
-  })
-})
-
-app.listen(port, () => {
+app.listen(port, hostname, () => {
   console.log(`> Server running at http://${hostname}:${port}/`)
 })
