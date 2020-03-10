@@ -1,5 +1,4 @@
-import { DynamoUserRepository } from '../../repository/DynamoUserRepository'
-import { CreateUserUsecase } from '../../domain/usecases/CreateUserUsecase'
+import { CreateUserController } from './controller/CreateUserController'
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -11,53 +10,7 @@ const express = require('express')
 const app = express()
 app.use(express.json())
 
-class HTTPErrror extends Error {
-  private statusCode: number
-
-  constructor(statusCode: number, message: string) {
-    super(message)
-    this.statusCode = statusCode
-  }
-}
-
-const userRouter = express.Router()
-userRouter
-  .route('/:userID?')
-  .all((req: any, res: any, next: any) => {
-    console.log(`> ${req.method} ${req.originalUrl}`)
-    next()
-  })
-  .get((req: any, res: any, next: any) => {
-    next(new HTTPErrror(405, 'Method not supported.'))
-  })
-  .put((req: any, res: any, next: any) => {
-    next(new HTTPErrror(405, 'Method not supported.'))
-  })
-  .post(async (req: any, res: any, next: any) => {
-    const AWS = require('aws-sdk')
-    AWS.config.update({
-      region: process.env.AWS_REGION,
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_KEY_ID
-    })
-    const dynamoDB = new AWS.DynamoDB.DocumentClient()
-    const userRepository = new DynamoUserRepository(dynamoDB)
-    const usecase = new CreateUserUsecase({ userRepository })
-
-    try {
-      await usecase.execute(req.body)
-      res.status(204).send()
-    } catch (error) {
-      console.log(`> ${error.message}`)
-      res.status(400).json({
-        status: 'error',
-        statusCode: 400,
-        message: error.message
-      })
-    }
-  })
-
-app.use('/user', userRouter)
+app.post('/user', CreateUserController)
 
 app.use(function(req: any, res: any) {
   const statusCode = 404
