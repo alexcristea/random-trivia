@@ -36,7 +36,12 @@ describe('CreateUserUsecase execute', () => {
 
   test('should return an Error when the email exists', async () => {
     // Arrange
-    const userRepository = new StubUserRepository({ email: 'jhon.appleseed@example.com' })
+    const validUser = await User.create({
+      name: 'Jhon Appleseed',
+      email: 'jhon.appleseed@example.com',
+      password: 'secret'
+    })
+    const userRepository = new StubUserRepository(validUser)
     const sut = new CreateUserUsecase({ userRepository })
 
     try {

@@ -64,6 +64,10 @@ export class User {
     })
   }
 
+  public async checkPassword(pwd: String): Promise<boolean> {
+    return await bcrypt.compare(pwd, this._password)
+  }
+
   public constructor(props: Props) {
     this._ID = uuid()
     this._name = props.name
