@@ -16,7 +16,7 @@ export const AuthenticationMiddleware = async (req: any, res: any, next: any) =>
 
     // TODO: Improve validation
     if (input.email == '' || input.password == '') {
-      throw new Error('Invalid .')
+      throw new Error('Unauthorized.')
     }
 
     const dynamoDB = new AWS.DynamoDB.DocumentClient()
@@ -31,10 +31,13 @@ export const AuthenticationMiddleware = async (req: any, res: any, next: any) =>
     next()
   } catch (error) {
     console.log(`> ${error.message}`)
-    res.status(401).json({
-      status: 'error',
-      statusCode: 401,
-      message: error.message
-    })
+    res
+      .set('WWW-Authenticate', 'Basic, charset=utf-8')
+      .status(401)
+      .json({
+        status: 'error',
+        statusCode: 401,
+        message: error.message
+      })
   }
 }
