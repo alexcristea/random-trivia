@@ -1,7 +1,16 @@
 import { v4 as uuid } from 'uuid'
 const bcrypt = require('bcrypt')
 
-export interface Props {
+interface UserProps {
+  ID: string
+  name: string
+  email: string
+  password: string
+  createdAt: Date
+  modifiedAt: Date
+}
+
+export interface CreateProps {
   name: string
   email: string
   password: string
@@ -12,21 +21,35 @@ export interface Snapshot {
   name: string
   email: string
   password: string
-  createdAt: Date
-  modifiedAt: Date
+  createdAt: number
+  modifiedAt: number
 }
 
 export class User {
-  private _ID: string
-  private _name: string
-  private _email: string
-  private _password: string
-  private _createdAt: Date
-  private _modifiedAt: Date
-
-  public static async create(props: Props) {
+  public static async create(props: CreateProps) {
     const password = await bcrypt.hash(props.password, 10)
-    return new User({ ...props, password })
+    const now = new Date()
+
+    const userProps = {
+      ID: uuid(),
+      name: props.name,
+      email: props.email,
+      password: password,
+      createdAt: now,
+      modifiedAt: now
+    }
+    return new User(userProps)
+  }
+
+  public static fromSnapshot(snapshot: Snapshot) {
+    return new User({
+      ID: snapshot.ID,
+      name: snapshot.name,
+      email: snapshot.email,
+      password: snapshot.password,
+      createdAt: new Date(snapshot.createdAt),
+      modifiedAt: new Date(snapshot.modifiedAt)
+    })
   }
 
   public get ID(): string {
@@ -59,8 +82,8 @@ export class User {
       name: this._name,
       email: this._email,
       password: this._password,
-      createdAt: this._createdAt,
-      modifiedAt: this._modifiedAt
+      createdAt: this._createdAt.getTime(),
+      modifiedAt: this._modifiedAt.getTime()
     })
   }
 
@@ -68,14 +91,20 @@ export class User {
     return await bcrypt.compare(pwd, this._password)
   }
 
-  public constructor(props: Props) {
-    this._ID = uuid()
+  private constructor(props: UserProps) {
+    this._ID = props.ID
     this._name = props.name
     this._email = props.email
     this._password = props.password
 
-    const now = new Date()
-    this._createdAt = now
-    this._modifiedAt = now
+    this._createdAt = props.createdAt
+    this._modifiedAt = props.modifiedAt
   }
+
+  private _ID: string
+  private _name: string
+  private _email: string
+  private _password: string
+  private _createdAt: Date
+  private _modifiedAt: Date
 }

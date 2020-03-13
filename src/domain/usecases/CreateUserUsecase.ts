@@ -17,7 +17,7 @@ export class CreateUserUsecase {
       throw new Error(`User with email '${request.email}' exists.`)
     }
 
-    const user = new User({ ...request })
+    const user = await User.create({ ...request })
     await this._userRepository.save(user)
 
     return user

@@ -26,11 +26,7 @@ export class DynamoUserRepository implements UserRepository {
     }
 
     const snapshot = results.Items[0]
-    return new User({
-      name: snapshot.name,
-      email: snapshot.email,
-      password: snapshot.password
-    })
+    return User.fromSnapshot(snapshot)
   }
 
   async save(user: User) {
