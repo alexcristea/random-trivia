@@ -10,6 +10,10 @@ export class StubUserRepository implements UserRepository {
     this._findByEmailResult = result ?? null
   }
 
+  async findById(id: string) {
+    return this._findByEmailResult
+  }
+
   async findByEmail(email: string) {
     return this._findByEmailResult
   }

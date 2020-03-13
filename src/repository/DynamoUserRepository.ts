@@ -10,6 +10,24 @@ export class DynamoUserRepository implements UserRepository {
     this.dynamodb = dynomoDB
   }
 
+  async findById(id: string) {
+    const query = {
+      ExpressionAttributeValues: {
+        ':id': id
+      },
+      KeyConditionExpression: 'ID = :id',
+      TableName: this.tableName
+    }
+
+    const results = await this.dynamodb.query(query).promise()
+    if (results.Count == 0) {
+      return null
+    }
+
+    const snapshot = results.Items[0]
+    return User.fromSnapshot(snapshot)
+  }
+
   async findByEmail(email: string) {
     const query = {
       ExpressionAttributeValues: {

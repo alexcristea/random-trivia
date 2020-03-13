@@ -10,21 +10,30 @@ export const AuthenticationMiddleware = async (req: any, res: any, next: any) =>
     let buff = Buffer.from(part, 'base64')
     let text = buff.toString('utf-8').split(':')
     let input = {
-      email: text[0],
-      password: text[1]
+      email: text[0] ?? '',
+      password: text[1] ?? ''
+    }
+
+    // TODO: Improve validation
+    if (input.email == '' || input.password == '') {
+      throw new Error('Invalid .')
     }
 
     const dynamoDB = new AWS.DynamoDB.DocumentClient()
     const userRepository = new DynamoUserRepository(dynamoDB)
     const usecase = new AuthenticationUsecase({ userRepository })
 
-    await usecase.execute(input)
+    const user = await usecase.execute(input)
+    req.auth = {
+      userID: user.ID
+    }
+
     next()
   } catch (error) {
     console.log(`> ${error.message}`)
-    res.status(403).json({
+    res.status(401).json({
       status: 'error',
-      statusCode: 403,
+      statusCode: 401,
       message: error.message
     })
   }

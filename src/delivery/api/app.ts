@@ -1,7 +1,8 @@
 import { CreateUserController } from './controller/CreateUserController'
-import { RouteUnavailableMiddleware } from './controller/MethodUnavailableController'
-import { ErrorHandlerMiddleware } from './controller/ErrorController'
-import { AuthenticationMiddleware } from './controller/AuthenticationMiddelware'
+import { RouteUnavailableMiddleware } from './middleware/RouteUnavailableMiddleware'
+import { ErrorHandlerMiddleware } from './middleware/ErrorHandlerMiddleware'
+import { AuthenticationMiddleware } from './middleware/AuthenticationMiddelware'
+import { GetUserController } from './controller/GetUserController'
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -16,9 +17,7 @@ app.use(express.json())
 app.post('/user', CreateUserController)
 
 app.use('/user', AuthenticationMiddleware)
-app.get('/user', (req: any, res: any) => {
-  res.status(200).send()
-})
+app.get('/user', GetUserController)
 
 app.use(RouteUnavailableMiddleware)
 app.use(ErrorHandlerMiddleware)
