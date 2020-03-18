@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 const bcrypt = require('bcrypt')
 
-interface ConstructorProps {
+interface UserProps {
   ID: string
   name: string
   email: string
@@ -53,58 +53,47 @@ export class User {
   }
 
   public get ID(): string {
-    return this._ID
+    return this._props.ID
   }
 
   public get name(): string {
-    return this._name
+    return this._props.name
   }
 
   public get email(): string {
-    return this._email
+    return this._props.email
   }
 
   public get password(): string {
-    return this._password
+    return this._props.password
   }
 
   public get createdAt(): Date {
-    return this._createdAt
+    return this._props.createdAt
   }
 
   public get modifiedAt(): Date {
-    return this._modifiedAt
+    return this._props.modifiedAt
   }
 
   public get snapshot(): Snapshot {
     return Object.freeze({
-      ID: this._ID,
-      name: this._name,
-      email: this._email,
-      password: this._password,
-      createdAt: this._createdAt.getTime(),
-      modifiedAt: this._modifiedAt.getTime()
+      ID: this._props.ID,
+      name: this._props.name,
+      email: this._props.email,
+      password: this._props.password,
+      createdAt: this._props.createdAt.getTime(),
+      modifiedAt: this._props.modifiedAt.getTime()
     })
   }
 
   public async checkPassword(pwd: String): Promise<boolean> {
-    return await bcrypt.compare(pwd, this._password)
+    return await bcrypt.compare(pwd, this._props.password)
   }
 
-  private constructor(props: ConstructorProps) {
-    this._ID = props.ID
-    this._name = props.name
-    this._email = props.email
-    this._password = props.password
-
-    this._createdAt = props.createdAt
-    this._modifiedAt = props.modifiedAt
+  private constructor(props: UserProps) {
+    this._props = props
   }
 
-  private _ID: string
-  private _name: string
-  private _email: string
-  private _password: string
-  private _createdAt: Date
-  private _modifiedAt: Date
+  private _props: UserProps
 }
