@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 const bcrypt = require('bcrypt')
 
-interface UserProps {
+interface ConstructorProps {
   ID: string
   name: string
   email: string
@@ -91,7 +91,7 @@ export class User {
     return await bcrypt.compare(pwd, this._password)
   }
 
-  private constructor(props: UserProps) {
+  private constructor(props: ConstructorProps) {
     this._ID = props.ID
     this._name = props.name
     this._email = props.email
