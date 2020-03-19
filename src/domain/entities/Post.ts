@@ -22,6 +22,16 @@ export interface CreateProps {
   metadata: Metadata
 }
 
+export interface Snapshot {
+  ID: string
+  userID: string
+  topic: string
+  content: string
+  metadata: Metadata
+  createdAt: number
+  modifiedAt: number
+}
+
 export class Post {
   public static create(props: CreateProps) {
     const ID = uuid()
@@ -35,6 +45,30 @@ export class Post {
       metadata: props.metadata,
       createdAt: now,
       modifiedAt: now
+    })
+  }
+
+  public static fromSnapshot(snapshot: Snapshot) {
+    return new Post({
+      ID: snapshot.ID,
+      userID: snapshot.ID,
+      topic: snapshot.topic,
+      content: snapshot.topic,
+      metadata: snapshot.metadata,
+      createdAt: new Date(snapshot.createdAt),
+      modifiedAt: new Date(snapshot.modifiedAt)
+    })
+  }
+
+  public get snapshot(): Snapshot {
+    return Object.freeze({
+      ID: this._props.ID,
+      userID: this._props.userID,
+      topic: this._props.topic,
+      content: this._props.content,
+      metadata: this._props.metadata,
+      createdAt: this._props.createdAt.getTime(),
+      modifiedAt: this._props.modifiedAt.getTime()
     })
   }
 

@@ -3,6 +3,7 @@ import { RouteUnavailableMiddleware } from './middleware/RouteUnavailableMiddlew
 import { ErrorHandlerMiddleware } from './middleware/ErrorHandlerMiddleware'
 import { AuthenticationMiddleware } from './middleware/AuthenticationMiddelware'
 import { GetUserController } from './controller/GetUserController'
+import { CreatePostController } from './controller/CreatePostController'
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -18,6 +19,9 @@ app.post('/user', CreateUserController)
 
 app.use('/user', AuthenticationMiddleware)
 app.get('/user', GetUserController)
+
+app.use('/post', AuthenticationMiddleware)
+app.post('/post', CreatePostController)
 
 app.use(RouteUnavailableMiddleware)
 app.use(ErrorHandlerMiddleware)
