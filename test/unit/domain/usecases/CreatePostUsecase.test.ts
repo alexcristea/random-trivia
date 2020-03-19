@@ -1,19 +1,26 @@
 import { CreatePostUsecase } from '../../../../src/domain/usecases/CreatePostUsecase'
-import { Post } from '../../../../src/domain/entities/Post'
 import { StubPostRepository } from '../../helpers/StubPostRepository'
+import { UUID } from '../../../../src/domain/entities/UUID'
 
 var MockDate = require('mockdate')
+var OriginalUUID: any
 
 describe('CreatePostUsecase execute', () => {
   beforeEach(() => {
     MockDate.set('2020-12-12')
+
+    OriginalUUID = UUID.create
+    UUID.create = () => 'fake-uuid'
   })
 
   afterEach(() => {
     MockDate.reset()
+
+    UUID.create = OriginalUUID
   })
 
   // Arrange
+  const fakeUUID = 'fake-uuid'
   const fakeDate = new Date('2020-12-12')
   const request = {
     userID: 'userID',
@@ -34,7 +41,7 @@ describe('CreatePostUsecase execute', () => {
     const response = await sut.execute(request)
 
     // Assert
-    // TODO: Cover the id
+    expect(response.ID).toEqual(fakeUUID)
     expect(response.userID).toEqual(request.userID)
     expect(response.topic).toEqual(request.topic)
     expect(response.content).toEqual(request.content)

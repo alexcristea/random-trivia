@@ -1,4 +1,6 @@
-import { v4 as uuid } from 'uuid'
+import { UUID } from './UUID'
+import { Password } from './Password'
+
 const bcrypt = require('bcrypt')
 
 interface UserProps {
@@ -27,11 +29,11 @@ export interface Snapshot {
 
 export class User {
   public static async create(props: CreateProps) {
-    const password = await bcrypt.hash(props.password, 10)
+    const password = await Password.create(props.password)
     const now = new Date()
 
     const userProps = {
-      ID: uuid(),
+      ID: UUID.create(),
       name: props.name,
       email: props.email,
       password: password,

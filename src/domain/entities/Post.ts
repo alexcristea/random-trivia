@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid'
+import { UUID } from './UUID'
 
 interface PostProps {
   ID: string
@@ -34,7 +34,7 @@ export interface Snapshot {
 
 export class Post {
   public static create(props: CreateProps) {
-    const ID = uuid()
+    const ID = UUID.create()
     const now = new Date()
 
     return new Post({
