@@ -6,11 +6,11 @@ export class DynamoUserRepository implements UserRepository {
   private tableName = 'Users'
   private indexName = 'email-index'
 
-  constructor(dynomoDB: any) {
+  public constructor(dynomoDB: any) {
     this.dynamodb = dynomoDB
   }
 
-  async findById(id: string) {
+  public async findById(id: string) {
     const query = {
       ExpressionAttributeValues: {
         ':id': id
@@ -28,7 +28,7 @@ export class DynamoUserRepository implements UserRepository {
     return User.fromSnapshot(snapshot)
   }
 
-  async findByEmail(email: string) {
+  public async findByEmail(email: string) {
     const query = {
       ExpressionAttributeValues: {
         ':e': email
@@ -47,7 +47,7 @@ export class DynamoUserRepository implements UserRepository {
     return User.fromSnapshot(snapshot)
   }
 
-  async save(user: User) {
+  public async save(user: User) {
     var params = {
       Item: user.snapshot,
       TableName: this.tableName

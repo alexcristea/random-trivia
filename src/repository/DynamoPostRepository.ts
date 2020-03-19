@@ -5,10 +5,11 @@ export class DynamoPostRepository implements PostRepository {
   private dynamodb: any
   private tableName = 'Posts'
 
-  constructor(dynomoDB: any) {
+  public constructor(dynomoDB: any) {
     this.dynamodb = dynomoDB
   }
-  async save(post: Post) {
+
+  public async save(post: Post) {
     var params = {
       Item: post.snapshot,
       TableName: this.tableName
