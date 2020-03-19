@@ -60,6 +60,34 @@ export class Post {
     })
   }
 
+  public get ID(): string {
+    return this._props.ID
+  }
+
+  public get userID(): string {
+    return this._props.userID
+  }
+
+  public get topic(): string {
+    return this._props.topic
+  }
+
+  public get content(): string {
+    return this._props.content
+  }
+
+  public get metadata(): Metadata {
+    return this._props.metadata
+  }
+
+  public get createdAt(): Date {
+    return this._props.createdAt
+  }
+
+  public get modifiedAt(): Date {
+    return this._props.modifiedAt
+  }
+
   public get snapshot(): Snapshot {
     return Object.freeze({
       ID: this._props.ID,
