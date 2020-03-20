@@ -11,7 +11,7 @@ export interface Props {
   postRepository: PostRepository
 }
 
-export class ListPoststUsecase {
+export class ListPostsUsecase {
   public constructor(props: Props) {
     this._props = props
   }

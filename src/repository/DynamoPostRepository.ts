@@ -27,6 +27,10 @@ export class DynamoPostRepository implements PostRepository {
     return Post.fromSnapshot(snapshot)
   }
 
+  public findAll(): Promise<Post[]> {
+    throw new Error('Method not implemented.')
+  }
+
   public async save(post: Post) {
     var params = {
       Item: post.snapshot,
