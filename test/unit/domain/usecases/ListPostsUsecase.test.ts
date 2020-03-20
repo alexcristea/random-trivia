@@ -1,13 +1,13 @@
 import { Post } from '../../../../src/domain/entities/Post'
 import { StubPostRepository } from '../../helpers/StubPostRepository'
-import { ListPoststUsecase } from '../../../../src/domain/usecases/ListPoststUsecase'
+import { ListPostsUsecase } from '../../../../src/domain/usecases/ListPostsUsecase'
 
 describe('ListPoststUsecase execute', () => {
   test('should return empty array if there are no posts in the system', async () => {
     // Arrange
     const postRepository = new StubPostRepository()
 
-    const sut = new ListPoststUsecase({ postRepository })
+    const sut = new ListPostsUsecase({ postRepository })
 
     // Act
     const result = await sut.execute()
@@ -34,7 +34,7 @@ describe('ListPoststUsecase execute', () => {
     const postRepository = new StubPostRepository()
     postRepository.save(post)
 
-    const sut = new ListPoststUsecase({ postRepository })
+    const sut = new ListPostsUsecase({ postRepository })
 
     // Act
     const result = await sut.execute()

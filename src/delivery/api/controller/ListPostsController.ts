@@ -1,13 +1,13 @@
 import { AWS } from '../factory/AWSFactory'
 import { DynamoPostRepository } from '../../../repository/DynamoPostRepository'
-import { ListPoststUsecase } from '../../../domain/usecases/ListPoststUsecase'
+import { ListPostsUsecase } from '../../../domain/usecases/ListPostsUsecase'
 
 export const ListPostsController = async (req: any, res: any, next: any) => {
   console.log(`> ${req.auth}`)
   try {
     const dynamoDB = new AWS.DynamoDB.DocumentClient()
     const postRepository = new DynamoPostRepository(dynamoDB)
-    const usecase = new ListPoststUsecase({ postRepository })
+    const usecase = new ListPostsUsecase({ postRepository })
 
     const posts = await usecase.execute()
     res.status(200).send(posts)
