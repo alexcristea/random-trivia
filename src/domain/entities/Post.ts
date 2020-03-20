@@ -51,9 +51,9 @@ export class Post {
   public static fromSnapshot(snapshot: Snapshot) {
     return new Post({
       ID: snapshot.ID,
-      userID: snapshot.ID,
+      userID: snapshot.userID,
       topic: snapshot.topic,
-      content: snapshot.topic,
+      content: snapshot.content,
       metadata: snapshot.metadata,
       createdAt: new Date(snapshot.createdAt),
       modifiedAt: new Date(snapshot.modifiedAt)
