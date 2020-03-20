@@ -2,19 +2,26 @@ import { UserRepository } from '../../../src/domain/boundries/UserRepository'
 import { User } from '../../../src/domain/entities/User'
 
 export class StubUserRepository implements UserRepository {
-  public savedUser: User
+  public get savedUser(): User {
+    return this._savedUser
+  }
 
-  constructor(result?: any) {
-    this._result = result
+  constructor(result?: User) {
+    this._findByEmailResult = result ?? null
+  }
+
+  async findById(id: string) {
+    return this._findByEmailResult
   }
 
   async findByEmail(email: string) {
-    return this._result
+    return this._findByEmailResult
   }
 
   async save(user: User) {
-    this.savedUser = user
+    this._savedUser = user
   }
 
-  private _result?: any
+  private _findByEmailResult: User | null
+  private _savedUser: User
 }
