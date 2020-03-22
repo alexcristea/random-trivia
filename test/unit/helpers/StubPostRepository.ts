@@ -6,7 +6,11 @@ export class StubPostRepository implements PostRepository {
     return this._savedPost
   }
 
-  async findById(id: string): Promise<Post | null> {
+  public get deletedPost(): Post {
+    return this._deletedPost
+  }
+
+  public async findById(id: string): Promise<Post | null> {
     if (this._savedPost.ID == id) {
       return this.savedPost
     }
@@ -14,16 +18,21 @@ export class StubPostRepository implements PostRepository {
     return null
   }
 
-  async findAll(): Promise<Post[]> {
+  public async findAll(): Promise<Post[]> {
     if (this._savedPost) {
       return [this.savedPost]
     }
     return []
   }
 
-  public async save(user: Post) {
-    this._savedPost = user
+  public async save(post: Post) {
+    this._savedPost = post
+  }
+
+  public async delete(post: Post) {
+    this._deletedPost = post
   }
 
   private _savedPost: Post
+  private _deletedPost: Post
 }
