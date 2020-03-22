@@ -14,6 +14,13 @@ export class StubPostRepository implements PostRepository {
     return null
   }
 
+  async findAll(): Promise<Post[]> {
+    if (this._savedPost) {
+      return [this.savedPost]
+    }
+    return []
+  }
+
   public async save(user: Post) {
     this._savedPost = user
   }

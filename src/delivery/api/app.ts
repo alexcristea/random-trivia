@@ -5,6 +5,8 @@ import { AuthenticationMiddleware } from './middleware/AuthenticationMiddelware'
 import { GetUserController } from './controller/GetUserController'
 import { CreatePostController } from './controller/CreatePostController'
 import { GetPostController } from './controller/GetPostController'
+import { ListPostsUsecase } from '../../domain/usecases/ListPostsUsecase'
+import { ListPostsController } from './controller/ListPostsController'
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -23,6 +25,7 @@ app.get('/user', GetUserController)
 
 app.use('/post', AuthenticationMiddleware)
 app.post('/post', CreatePostController)
+app.get('/post/list', ListPostsController)
 app.get('/post/:postID', GetPostController)
 
 app.use(RouteUnavailableMiddleware)
