@@ -43,4 +43,16 @@ export class DynamoPostRepository implements PostRepository {
     }
     await this.dynamodb.put(params).promise()
   }
+
+  public async delete(post: Post): Promise<void> {
+    const query = {
+      Key: {
+        ID: post.ID,
+        userID: post.userID
+      },
+      TableName: this.tableName
+    }
+
+    await this.dynamodb.delete(query).promise()
+  }
 }
