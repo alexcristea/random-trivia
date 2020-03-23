@@ -72,12 +72,24 @@ export class Post {
     return this._props.topic
   }
 
+  public set topic(topic: string) {
+    this._props.topic = topic
+  }
+
   public get content(): string {
     return this._props.content
   }
 
+  public set content(content: string) {
+    this._props.content = content
+  }
+
   public get metadata(): Metadata {
     return this._props.metadata
+  }
+
+  public set metadata(metadata: Metadata) {
+    this._props.metadata = metadata
   }
 
   public get createdAt(): Date {
@@ -86,6 +98,10 @@ export class Post {
 
   public get modifiedAt(): Date {
     return this._props.modifiedAt
+  }
+
+  public set modifiedAt(modifiedAt: Date) {
+    this._props.modifiedAt = modifiedAt
   }
 
   public get snapshot(): Snapshot {

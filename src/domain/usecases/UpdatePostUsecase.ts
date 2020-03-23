@@ -30,6 +30,10 @@ export class UpdatePostUsecase {
       throw new Error(`User with id '${request.userID} cannot update post with id '${request.postID}' not found.`)
     }
 
+    post.topic = request.topic
+    post.content = request.content
+    post.metadata = request.metadata
+    post.modifiedAt = new Date()
     await this._props.postRepository.update(post)
   }
 
