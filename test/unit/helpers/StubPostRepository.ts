@@ -6,6 +6,10 @@ export class StubPostRepository implements PostRepository {
     return this._savedPost
   }
 
+  public get updatedPost(): Post {
+    return this._updatedPost
+  }
+
   public get deletedPost(): Post {
     return this._deletedPost
   }
@@ -29,10 +33,15 @@ export class StubPostRepository implements PostRepository {
     this._savedPost = post
   }
 
+  public async update(post: Post): Promise<void> {
+    this._updatedPost = post
+  }
+
   public async delete(post: Post) {
     this._deletedPost = post
   }
 
   private _savedPost: Post
+  private _updatedPost: Post
   private _deletedPost: Post
 }

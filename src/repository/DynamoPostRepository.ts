@@ -8,7 +8,6 @@ export class DynamoPostRepository implements PostRepository {
   public constructor(dynomoDB: any) {
     this.dynamodb = dynomoDB
   }
-
   public async findById(id: string): Promise<Post | null> {
     const query = {
       ExpressionAttributeValues: {
@@ -42,6 +41,10 @@ export class DynamoPostRepository implements PostRepository {
       TableName: this.tableName
     }
     await this.dynamodb.put(params).promise()
+  }
+
+  update(post: Post): Promise<void> {
+    throw new Error('Method not implemented.')
   }
 
   public async delete(post: Post): Promise<void> {
