@@ -3,6 +3,7 @@ import { StubUserRepository } from '../../helpers/StubUserRepository'
 import { User } from '../../../../src/domain/entities/User'
 import { UUID } from '../../../../src/domain/entities/UUID'
 import { Password } from '../../../../src/domain/entities/Password'
+import { StubUserPoolQueue } from '../../helpers/StubUserPoolQueue'
 
 var MockDate = require('mockdate')
 
@@ -39,7 +40,8 @@ describe('CreateUserUsecase execute', () => {
   test('should return a User instance when called with a valid CreateUserRequest', async () => {
     // Arrange
     const userRepository = new StubUserRepository()
-    const sut = new CreateUserUsecase({ userRepository })
+    const userPoolQueue = new StubUserPoolQueue()
+    const sut = new CreateUserUsecase({ userRepository, userPoolQueue })
 
     // Act
     const response = await sut.execute(request)
@@ -56,7 +58,8 @@ describe('CreateUserUsecase execute', () => {
   test('should return a User instance when the email does not exist in the system', async () => {
     // Arrange
     const userRepository = new StubUserRepository()
-    const sut = new CreateUserUsecase({ userRepository })
+    const userPoolQueue = new StubUserPoolQueue()
+    const sut = new CreateUserUsecase({ userRepository, userPoolQueue })
 
     // Act
     const response = await sut.execute(request)
@@ -73,7 +76,8 @@ describe('CreateUserUsecase execute', () => {
       password: 'secret'
     })
     const userRepository = new StubUserRepository(validUser)
-    const sut = new CreateUserUsecase({ userRepository })
+    const userPoolQueue = new StubUserPoolQueue()
+    const sut = new CreateUserUsecase({ userRepository, userPoolQueue })
 
     try {
       // Act
@@ -88,12 +92,26 @@ describe('CreateUserUsecase execute', () => {
   test('should save the User instance into the UserRepository', async () => {
     // Arrange
     const userRepository = new StubUserRepository()
-    const sut = new CreateUserUsecase({ userRepository })
+    const userPoolQueue = new StubUserPoolQueue()
+    const sut = new CreateUserUsecase({ userRepository, userPoolQueue })
 
     // Act
     let actual = await sut.execute(request)
 
     // Assert
     expect(userRepository.savedUser).toBe(actual)
+  })
+
+  test('should save the User instance into the UserPoolQueue', async () => {
+    // Arrange
+    const userRepository = new StubUserRepository()
+    const userPoolQueue = new StubUserPoolQueue()
+    const sut = new CreateUserUsecase({ userRepository, userPoolQueue })
+
+    // Act
+    let actual = await sut.execute(request)
+
+    // Assert
+    expect(userPoolQueue.queuedNewUser).toBe(actual)
   })
 })
