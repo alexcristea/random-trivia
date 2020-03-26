@@ -1,7 +1,7 @@
-import { v4 as uuid } from 'uuid'
+const uuid = require('uuid')
 
 export class UUID {
   static create() {
-    return uuid()
+    return uuid.v4()
   }
 }
