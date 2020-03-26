@@ -1,7 +1,7 @@
-import { v4 } from 'uuid'
+import { v4 as uuid } from 'uuid'
 
 export class UUID {
   static create() {
-    return v4()
+    return uuid()
   }
 }
