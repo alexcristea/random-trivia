@@ -1,8 +1,8 @@
 import { Post } from '../../../../src/domain/entities/Post'
 import { StubPostRepository } from '../../helpers/StubPostRepository'
-import { DeletePostUsecase } from '../../../../src/domain/usecases/DeletePostUsecase'
+import { UpdatePostUsecase } from '../../../../src/domain/usecases/UpdatePostUsecase'
 
-describe('DeletePostUsecase execute', () => {
+describe('UpdatePostUsecase execute', () => {
   test('should return an Error when the post id is not valid', async () => {
     // Arrange
     const postSnapshot = {
@@ -24,10 +24,16 @@ describe('DeletePostUsecase execute', () => {
 
     const request = {
       postID: 'anotherPostID',
-      userID: 'anotherUserID'
+      userID: 'anotherUserID',
+      topic: 'topic',
+      content: 'content',
+      metadata: {
+        url: 'http://google.com',
+        author: 'author'
+      }
     }
 
-    const sut = new DeletePostUsecase({ postRepository })
+    const sut = new UpdatePostUsecase({ postRepository })
 
     // Act
     try {
@@ -38,7 +44,7 @@ describe('DeletePostUsecase execute', () => {
     }
   })
 
-  test('should return an Error when the user is not allowed to delete the post', async () => {
+  test('should return an Error when the user is not allowed to update the post', async () => {
     // Arrange
     const postSnapshot = {
       ID: 'postID',
@@ -59,10 +65,16 @@ describe('DeletePostUsecase execute', () => {
 
     const request = {
       postID: 'postID',
-      userID: 'anotherUserID'
+      userID: 'anotherUserID',
+      topic: 'topic',
+      content: 'content',
+      metadata: {
+        url: 'http://google.com',
+        author: 'author'
+      }
     }
 
-    const sut = new DeletePostUsecase({ postRepository })
+    const sut = new UpdatePostUsecase({ postRepository })
 
     // Act
     try {
@@ -70,12 +82,12 @@ describe('DeletePostUsecase execute', () => {
       fail()
     } catch (error) {
       expect(error).toEqual(
-        new Error(`User with id '${request.userID} cannot delete post with id '${request.postID}' not found.`)
+        new Error(`User with id '${request.userID} cannot update post with id '${request.postID}' not found.`)
       )
     }
   })
 
-  test('should ask the repository to delete the post when id is valid', async () => {
+  test('should ask the repository to update the post when id is valid', async () => {
     // Arrange
     const postSnapshot = {
       ID: 'postID',
@@ -96,15 +108,21 @@ describe('DeletePostUsecase execute', () => {
 
     const request = {
       postID: 'postID',
-      userID: 'userID'
+      userID: 'userID',
+      topic: 'topic',
+      content: 'content',
+      metadata: {
+        url: 'http://google.com',
+        author: 'author'
+      }
     }
 
-    const sut = new DeletePostUsecase({ postRepository })
+    const sut = new UpdatePostUsecase({ postRepository })
 
     // Act
     await sut.execute(request)
 
     // Assert
-    expect(postRepository.deletedPost).toEqual(post)
+    expect(postRepository.updatedPost).toEqual(post)
   })
 })

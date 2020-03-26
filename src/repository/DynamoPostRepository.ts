@@ -8,7 +8,6 @@ export class DynamoPostRepository implements PostRepository {
   public constructor(dynomoDB: any) {
     this.dynamodb = dynomoDB
   }
-
   public async findById(id: string): Promise<Post | null> {
     const query = {
       ExpressionAttributeValues: {
@@ -42,6 +41,32 @@ export class DynamoPostRepository implements PostRepository {
       TableName: this.tableName
     }
     await this.dynamodb.put(params).promise()
+  }
+
+  public async update(post: Post): Promise<void> {
+    const snapshot = post.snapshot
+    const query = {
+      Key: {
+        ID: post.ID,
+        userID: post.userID
+      },
+      UpdateExpression: 'set #topic = :topic, #content = :content, #metadata = :metadata, #modifiedAt = :modifiedAt',
+      ExpressionAttributeValues: {
+        ':topic': snapshot.topic,
+        ':content': snapshot.content,
+        ':metadata': snapshot.metadata,
+        ':modifiedAt': snapshot.modifiedAt
+      },
+      ExpressionAttributeNames: {
+        '#topic': 'topic',
+        '#content': 'content',
+        '#metadata': 'metadata',
+        '#modifiedAt': 'modifiedAt'
+      },
+      TableName: this.tableName
+    }
+
+    await this.dynamodb.update(query).promise()
   }
 
   public async delete(post: Post): Promise<void> {

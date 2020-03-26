@@ -1,6 +1,6 @@
 import { PostRepository } from '../boundries/PostRepository'
 
-export interface DeleteUserRequest {
+export interface DeletePostRequest {
   postID: string
   userID: string
 }
@@ -14,7 +14,7 @@ export class DeletePostUsecase {
     this._props = props
   }
 
-  public async execute(request: DeleteUserRequest): Promise<void> {
+  public async execute(request: DeletePostRequest): Promise<void> {
     const post = await this._props.postRepository.findById(request.postID)
     if (!post) {
       throw new Error(`Post with id '${request.postID}' not found.`)

@@ -7,6 +7,7 @@ import { CreatePostController } from './controller/CreatePostController'
 import { GetPostController } from './controller/GetPostController'
 import { ListPostsController } from './controller/ListPostsController'
 import { DeletePostController } from './controller/DeletePostController'
+import { UpdatePostController } from './controller/UpdatePostController'
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -18,16 +19,17 @@ const express = require('express')
 const app = express()
 app.use(express.json())
 
-app.post('/user', CreateUserController)
+app.post('/users', CreateUserController)
 
-app.use('/user', AuthenticationMiddleware)
-app.get('/user', GetUserController)
+app.use('/users/me', AuthenticationMiddleware)
+app.get('/users/me', GetUserController)
 
-app.use('/post', AuthenticationMiddleware)
-app.post('/post', CreatePostController)
-app.get('/post/list', ListPostsController)
-app.get('/post/:postID', GetPostController)
-app.delete('/post/:postID', DeletePostController)
+app.use('/posts', AuthenticationMiddleware)
+app.post('/posts', CreatePostController)
+app.get('/posts', ListPostsController)
+app.get('/posts/:postID', GetPostController)
+app.put('/posts/:postID', UpdatePostController)
+app.delete('/posts/:postID', DeletePostController)
 
 app.use(RouteUnavailableMiddleware)
 app.use(ErrorHandlerMiddleware)
